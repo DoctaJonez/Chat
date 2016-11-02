@@ -14,8 +14,22 @@ class App extends React.Component {
     constructor() {
         super();
         this.state = {
-            fishes: {},
-            order: {},
+            users: {
+                ['System']: {
+                    displayName: 'System',
+                    id: 'System',
+                    profileImage: 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
+                }
+            },
+            rooms: {
+                'Public room': {
+                    messages: {
+                        userId: 'System',
+                        message: 'Welcome to the public chat room.  Everyone is welcome in this room',
+                    },
+                },
+                createdById: 'System',
+            ,
         };
 
         this.addFish = this.addFish.bind(this);
@@ -27,9 +41,9 @@ class App extends React.Component {
     }
 
     componentWillMount() {
-        this.ref = base.syncState(`${this.props.params.storeId}/fishes`, {
+        this.ref = base.syncState(`users`, {
             context: this,
-            state: 'fishes',
+            state: 'users',
         });
 
         const order = localStorage.getItem(`order-${this.props.params.storeId}`);
@@ -106,7 +120,7 @@ class App extends React.Component {
                 <div className="menu">
                     <Header tagline="Fresh seafood market" />
                     <ul>
-                        { Object.keys(this.state.fishes).map((key) => <Fish addToOrder={this.addToOrder} key={key} index={key} details={this.state.fishes[key]} />) }
+                        { Object.keys(this.state.users).map((key) => <Fish addToOrder={this.addToOrder} key={key} index={key} details={this.state.fishes[key]} />) }
                     </ul>
                 </div>
                 <Order fishes={this.state.fishes} order={this.state.order} params={this.props.params} removeFromOrder={this.removeFromOrder} />
